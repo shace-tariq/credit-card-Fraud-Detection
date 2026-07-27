@@ -1,0 +1,116 @@
+# =====================================================================
+# Credit Card Fraud Detection - central configuration
+# ---------------------------------------------------------------------
+# All paths are resolved relative to the project root (the directory
+# that contains this `config/` folder). Edit values here rather than
+# hard-coding them in modules.
+# =====================================================================
+
+project:
+  name: "credit-card-fraud-detection"
+  random_state: 42          # global seed for reproducibility
+
+paths:
+  raw_data: "data/raw/creditcard.csv"
+  processed_dir: "data/processed"
+  models_dir: "models"
+  reports_dir: "reports"
+  figures_dir: "figures"
+
+data:
+  target: "Class"           # 1 = fraud, 0 = legitimate
+  # Columns that need scaling. The V1..V28 features are already PCA
+  # components (roughly standardised); only Time and Amount are on
+  # their own raw scales, so those are the primary scaling targets.
+  raw_scale_columns: ["Time", "Amount"]
+  test_size: 0.2
+  stratify: true            # preserve the fraud ratio across the split
+
+preprocessing:
+  # Scalers to compare in milestone 3. "standard" -> StandardScaler,
+  # "minmax" -> MinMaxScaler, "robust" -> RobustScaler.
+  scalers: ["standard", "minmax", "robust"]
+  default_scaler: "robust"  # robust is less sensitive to the heavy Amount outliers
+  # Scale ALL feature columns, or only `data.raw_scale_columns`?
+  scale_all_features: false
+  # Remove exact duplicate rows BEFORE splitting to avoid train/test leakage.
+  remove_duplicates: true
+
+# ---------------------------------------------------------------------
+# Model zoo. Each entry maps a short key -> constructor defaults.
+# `class_weight: balanced` is applied where the estimator supports it
+# as a cheap, no-resampling baseline for imbalance.
+# ---------------------------------------------------------------------
+models:
+  logistic_regression:
+    max_iter: 1000
+    class_weight: "balanced"
+    n_jobs: -1
+  decision_tree:
+    max_depth: 8
+    class_weight: "balanced"
+  random_forest:
+    n_estimators: 200
+    max_depth: null
+    class_weight: "balanced"
+    n_jobs: -1
+  xgboost:
+    n_estimators: 300
+    max_depth: 6
+    learning_rate: 0.1
+    subsample: 0.9
+    colsample_bytree: 0.9
+    eval_metric: "aucpr"
+    tree_method: "hist"
+    # scale_pos_weight is set dynamically to (n_neg / n_pos) at fit time.
+  lightgbm:
+    n_estimators: 300
+    max_depth: -1
+    learning_rate: 0.05
+    num_leaves: 31
+    subsample: 0.9
+    colsample_bytree: 0.9
+    class_weight: "balanced"
+    n_jobs: -1
+    verbose: -1
+
+# ---------------------------------------------------------------------
+# Imbalanced-learning strategies compared in milestone 5.
+# `adasyn` can fail on some folds when a minority sample has no
+# minority neighbours; the runner degrades gracefully if so.
+# ---------------------------------------------------------------------
+resampling:
+  strategies: ["none", "random_under", "random_over", "smote", "adasyn"]
+  smote_k_neighbors: 5
+  adasyn_n_neighbors: 5
+
+experiments:
+  # Which model x resampling combinations to run in the sweep.
+  models: ["logistic_regression", "decision_tree", "random_forest", "xgboost", "lightgbm"]
+  cv_folds: 5
+  # Primary metric used to rank experiments (fraud-detection oriented).
+  primary_metric: "pr_auc"
+
+tuning:
+  # Models to hyperparameter-tune in milestone 7 and their search method.
+  randomized:
+    n_iter: 30
+    scoring: "average_precision"   # == PR-AUC
+    cv_folds: 4
+  # GridSearchCV is reserved for a small, well-understood grid.
+  grid_scoring: "average_precision"
+
+threshold:
+  # Thresholds swept in milestone 9 (probability cut-offs).
+  min: 0.01
+  max: 0.99
+  steps: 99
+  # Business objective: catch as much fraud as possible while keeping
+  # precision acceptable. Used to auto-select an operating point.
+  min_precision: 0.80
+
+explainability:
+  # Number of test samples used for SHAP (full set is expensive).
+  shap_sample_size: 2000
+  # Number of individual predictions to explain in detail.
+  individual_explanations: 3

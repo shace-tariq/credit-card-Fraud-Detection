@@ -1,0 +1,39 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# ---- Virtual environment ----
+.venv/
+venv/
+env/
+
+# ---- Testing / caches ----
+.pytest_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# ---- Data (never commit the raw dataset) ----
+data/raw/*.csv
+data/raw/*.zip
+data/processed/*
+
+# ---- Trained model artifacts ----
+models/*.pkl
+models/*.joblib
+
+# ---- Generated report artifacts (keep curated markdown reports) ----
+reports/figures/*.png
+reports/figures/*.jpg
+reports/*.json
+reports/*.csv
+
+# ---- OS noise ----
+.DS_Store
+Thumbs.db
+
+# Keep placeholder directories tracked
+!**/.gitkeep

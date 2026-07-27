@@ -1,0 +1,30 @@
+# Credit Card Fraud Detection - pinned dependencies
+# Tested with Python 3.14 on Windows. Versions pinned for reproducibility.
+
+# --- Core scientific stack ---
+numpy==2.4.2
+pandas==3.0.0
+scipy==1.17.0
+scikit-learn==1.8.0
+
+# --- Visualisation ---
+matplotlib==3.10.9
+seaborn==0.13.2
+
+# --- Imbalanced learning ---
+imbalanced-learn==0.14.2
+
+# --- Gradient boosting models ---
+xgboost==3.3.0
+lightgbm==4.7.0
+
+# --- Explainability ---
+shap==0.52.0
+
+# --- Utilities ---
+PyYAML==6.0.3
+joblib==1.5.3
+tqdm==4.67.3
+
+# --- Testing ---
+pytest==8.4.2
