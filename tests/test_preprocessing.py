@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-import pytest
 
 from fraud_detection.data import split_features_target
 from fraud_detection.features import preprocessing as pp

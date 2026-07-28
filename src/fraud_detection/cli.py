@@ -12,6 +12,7 @@ Currently available:
     fraud-detect train-boosting  # M6: XGBoost + LightGBM vs previous models
     fraud-detect tune-xgboost    # M7: Optuna hyperparameter search (weighted XGBoost)
     fraud-detect optimise-threshold  # M8: business-cost threshold optimisation
+    fraud-detect explain         # M9: SHAP explanations for the production model
 """
 from __future__ import annotations
 
@@ -101,6 +102,15 @@ def _cmd_optimise_threshold(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_explain(args: argparse.Namespace) -> int:
+    from fraud_detection.evaluation import run_shap_explainability
+
+    report = run_shap_explainability(CONFIG, threshold=args.threshold)
+    print(f"\nSHAP report written to:      {report}")
+    print(f"SHAP figures saved under:    {CONFIG.path('figures_dir')}")
+    return 0
+
+
 # ----------------------------------------------------------------------
 # Parser construction
 # ----------------------------------------------------------------------
@@ -178,6 +188,15 @@ def build_parser() -> argparse.ArgumentParser:
     p_thr.add_argument("--fn-cost", type=float, default=None,
                        help="Cost of one false negative (default: from config, 20).")
     p_thr.set_defaults(func=_cmd_optimise_threshold)
+
+    p_expl = sub.add_parser(
+        "explain",
+        help="Generate SHAP explanations (global importance, dependence, and "
+        "per-category waterfalls) for the saved production model.",
+    )
+    p_expl.add_argument("--threshold", type=float, default=0.5,
+                        help="Threshold for TP/FP/TN/FN categorisation (default 0.5).")
+    p_expl.set_defaults(func=_cmd_explain)
 
     return parser
 

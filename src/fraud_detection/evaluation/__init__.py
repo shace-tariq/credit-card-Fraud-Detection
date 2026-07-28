@@ -4,6 +4,12 @@ from fraud_detection.evaluation.metrics import (
     ClassificationMetrics,
     compute_metrics,
 )
+from fraud_detection.evaluation.explainability import (
+    compute_shap,
+    global_importance,
+    run_shap_explainability,
+    select_representatives,
+)
 from fraud_detection.evaluation.threshold import (
     ThresholdOptima,
     add_business_cost,
@@ -22,4 +28,8 @@ __all__ = [
     "production_scores",
     "run_threshold_optimization",
     "threshold_sweep",
+    "compute_shap",
+    "global_importance",
+    "select_representatives",
+    "run_shap_explainability",
 ]

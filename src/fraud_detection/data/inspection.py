@@ -16,12 +16,11 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any
 
 import pandas as pd
 
 from fraud_detection.config import CONFIG, Config
-from fraud_detection.data.loader import load_raw_data, split_features_target
+from fraud_detection.data.loader import load_raw_data
 from fraud_detection.utils import get_logger
 
 logger = get_logger(__name__)

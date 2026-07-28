@@ -152,7 +152,6 @@ def plot_confusion_matrices(results: list[BaselineResult], out_dir: Path) -> Pat
 def plot_metric_comparison(results: list[BaselineResult], out_dir: Path) -> Path:
     """Grouped bar chart comparing key metrics across models."""
     metrics = ["recall", "precision", "f1", "pr_auc", "roc_auc"]
-    names = [r.display_name for r in results]
     colors = [LEGIT_COLOR, FRAUD_COLOR, "#6a4c93"]
     x = np.arange(len(metrics))
     width = 0.8 / len(results)
