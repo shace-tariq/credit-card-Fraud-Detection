@@ -92,13 +92,12 @@ experiments:
   primary_metric: "pr_auc"
 
 tuning:
-  # Models to hyperparameter-tune in milestone 7 and their search method.
-  randomized:
-    n_iter: 30
-    scoring: "average_precision"   # == PR-AUC
-    cv_folds: 4
-  # GridSearchCV is reserved for a small, well-understood grid.
-  grid_scoring: "average_precision"
+  # Optuna hyperparameter optimisation of the weighted XGBoost (milestone 7).
+  optuna:
+    n_trials: 50
+    cv_folds: 3                     # stratified folds inside each trial
+    scoring: "average_precision"    # == PR-AUC (the optimisation target)
+    timeout: null                   # optional wall-clock cap in seconds
 
 threshold:
   # Thresholds swept in milestone 9 (probability cut-offs).

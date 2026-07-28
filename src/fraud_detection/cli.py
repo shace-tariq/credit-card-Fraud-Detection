@@ -10,6 +10,7 @@ Currently available:
     fraud-detect train-baseline  # M4: train + evaluate baseline models
     fraud-detect train-balanced  # M5: compare imbalance-handling strategies
     fraud-detect train-boosting  # M6: XGBoost + LightGBM vs previous models
+    fraud-detect tune-xgboost    # M7: Optuna hyperparameter search (weighted XGBoost)
 """
 from __future__ import annotations
 
@@ -78,6 +79,15 @@ def _cmd_train_boosting(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_tune_xgboost(args: argparse.Namespace) -> int:
+    from fraud_detection.models import run_tuning
+
+    report = run_tuning(CONFIG, n_trials=args.trials)
+    print(f"\nTuning report written to:   {report}")
+    print(f"Tuned model + study saved:  {CONFIG.path('models_dir')}")
+    return 0
+
+
 # ----------------------------------------------------------------------
 # Parser construction
 # ----------------------------------------------------------------------
@@ -133,6 +143,17 @@ def build_parser() -> argparse.ArgumentParser:
         "Logistic Regression, Random Forest, and the best M5 balanced model.",
     )
     p_boost.set_defaults(func=_cmd_train_boosting)
+
+    p_tune = sub.add_parser(
+        "tune-xgboost",
+        help="Optuna hyperparameter optimisation of the weighted XGBoost "
+        "(maximise PR-AUC via stratified CV).",
+    )
+    p_tune.add_argument(
+        "--trials", type=int, default=None,
+        help="Number of Optuna trials (default: from config, 50).",
+    )
+    p_tune.set_defaults(func=_cmd_tune_xgboost)
 
     return parser
 
