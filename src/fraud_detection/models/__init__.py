@@ -26,6 +26,11 @@ from fraud_detection.models.imbalance import (
     build_experiment_pipeline,
     build_sampler,
 )
+from fraud_detection.models.tuning import (
+    make_objective,
+    run_tuning,
+    suggest_params,
+)
 from fraud_detection.models.training import (
     BaselineResult,
     leaderboard,
@@ -53,4 +58,7 @@ __all__ = [
     "ModelEval",
     "train_boosting_pipeline",
     "run_boosting_training",
+    "suggest_params",
+    "make_objective",
+    "run_tuning",
 ]
