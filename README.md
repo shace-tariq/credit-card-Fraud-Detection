@@ -75,6 +75,7 @@ fraud-detect eda            # Milestone 2: EDA figures + teaching report
 fraud-detect preprocess     # Milestone 3: leakage-safe pipeline + scaler comparison
 fraud-detect train-baseline # Milestone 4: baseline models + comparison/leaderboard
 fraud-detect train-balanced # Milestone 5: imbalance strategies (weights/sampling/SMOTE)
+fraud-detect train-boosting # Milestone 6: XGBoost + LightGBM vs previous models
 ```
 
 ---
@@ -88,7 +89,7 @@ fraud-detect train-balanced # Milestone 5: imbalance strategies (weights/samplin
 | 3  | Data preprocessing | scaling, train/test split, pipelines | ✅ |
 | 4  | Baseline models | Logistic Regression, Decision Tree, Random Forest | ✅ |
 | 5  | Imbalanced learning | RandomUnder/Over, SMOTE, ADASYN | ✅ |
-| 6  | Advanced models | XGBoost, LightGBM | ⏳ |
+| 6  | Advanced models | XGBoost, LightGBM | ✅ |
 | 7  | Hyperparameter optimisation | RandomizedSearchCV, GridSearchCV, CV | ⏳ |
 | 8  | Model evaluation | confusion matrix, P/R/F1, ROC-AUC, PR-AUC, thresholds | ⏳ |
 | 9  | Explainable AI | SHAP, feature importance | ⏳ |

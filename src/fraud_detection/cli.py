@@ -9,6 +9,7 @@ Currently available:
     fraud-detect preprocess   # M3: leakage-safe preprocessing pipeline + report
     fraud-detect train-baseline  # M4: train + evaluate baseline models
     fraud-detect train-balanced  # M5: compare imbalance-handling strategies
+    fraud-detect train-boosting  # M6: XGBoost + LightGBM vs previous models
 """
 from __future__ import annotations
 
@@ -68,6 +69,15 @@ def _cmd_train_balanced(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_train_boosting(args: argparse.Namespace) -> int:
+    from fraud_detection.models import run_boosting_training
+
+    report = run_boosting_training(CONFIG)
+    print(f"\nBoosting report written to:  {report}")
+    print(f"Trained models saved under:  {CONFIG.path('models_dir')}")
+    return 0
+
+
 # ----------------------------------------------------------------------
 # Parser construction
 # ----------------------------------------------------------------------
@@ -116,6 +126,13 @@ def build_parser() -> argparse.ArgumentParser:
         "SMOTE, ADASYN) x (LogReg, Random Forest) inside imblearn pipelines.",
     )
     p_bal.set_defaults(func=_cmd_train_balanced)
+
+    p_boost = sub.add_parser(
+        "train-boosting",
+        help="Train XGBoost + LightGBM (default & weighted) and compare against "
+        "Logistic Regression, Random Forest, and the best M5 balanced model.",
+    )
+    p_boost.set_defaults(func=_cmd_train_boosting)
 
     return parser
 
