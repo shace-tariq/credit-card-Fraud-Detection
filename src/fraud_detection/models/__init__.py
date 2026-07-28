@@ -12,6 +12,15 @@ from fraud_detection.models.balanced_training import (
     run_balanced_training,
     train_experiment,
 )
+from fraud_detection.models.boosting import (
+    build_boosting_models,
+    build_boosting_pipeline,
+)
+from fraud_detection.models.boosting_training import (
+    ModelEval,
+    run_boosting_training,
+    train_boosting_pipeline,
+)
 from fraud_detection.models.imbalance import (
     STRATEGY_ORDER,
     build_experiment_pipeline,
@@ -39,4 +48,9 @@ __all__ = [
     "ExperimentResult",
     "train_experiment",
     "run_balanced_training",
+    "build_boosting_models",
+    "build_boosting_pipeline",
+    "ModelEval",
+    "train_boosting_pipeline",
+    "run_boosting_training",
 ]
