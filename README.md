@@ -77,6 +77,7 @@ fraud-detect train-baseline # Milestone 4: baseline models + comparison/leaderbo
 fraud-detect train-balanced # Milestone 5: imbalance strategies (weights/sampling/SMOTE)
 fraud-detect train-boosting # Milestone 6: XGBoost + LightGBM vs previous models
 fraud-detect tune-xgboost --trials 50  # Milestone 7: Optuna PR-AUC optimisation
+fraud-detect optimise-threshold --fp-cost 1 --fn-cost 20  # Milestone 8: business-cost threshold
 ```
 
 ---
@@ -92,7 +93,7 @@ fraud-detect tune-xgboost --trials 50  # Milestone 7: Optuna PR-AUC optimisation
 | 5  | Imbalanced learning | RandomUnder/Over, SMOTE, ADASYN | ✅ |
 | 6  | Advanced models | XGBoost, LightGBM | ✅ |
 | 7  | Hyperparameter optimisation | Optuna (TPE) PR-AUC search, stratified CV | ✅ |
-| 8  | Model evaluation | confusion matrix, P/R/F1, ROC-AUC, PR-AUC, thresholds | ⏳ |
+| 8  | Threshold optimisation | business-cost analysis, operating-point selection | ✅ |
 | 9  | Explainable AI | SHAP, feature importance | ⏳ |
 | 10 | Final project | leaderboard, best model, `predict.py`, docs | ⏳ |
 

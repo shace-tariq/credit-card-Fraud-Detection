@@ -100,13 +100,16 @@ tuning:
     timeout: null                   # optional wall-clock cap in seconds
 
 threshold:
-  # Thresholds swept in milestone 9 (probability cut-offs).
+  # Thresholds swept in milestone 8 (probability cut-offs).
   min: 0.01
   max: 0.99
   steps: 99
-  # Business objective: catch as much fraud as possible while keeping
-  # precision acceptable. Used to auto-select an operating point.
-  min_precision: 0.80
+  # Production model whose scores are analysed (from milestone 6).
+  production_model: "boosting_xgboost_weighted.joblib"
+  # Business cost model: a missed fraud (FN) costs far more than a false
+  # alarm (FP). The recommended operating point minimises total cost.
+  fp_cost: 1
+  fn_cost: 20
 
 explainability:
   # Number of test samples used for SHAP (full set is expensive).

@@ -11,6 +11,7 @@ Currently available:
     fraud-detect train-balanced  # M5: compare imbalance-handling strategies
     fraud-detect train-boosting  # M6: XGBoost + LightGBM vs previous models
     fraud-detect tune-xgboost    # M7: Optuna hyperparameter search (weighted XGBoost)
+    fraud-detect optimise-threshold  # M8: business-cost threshold optimisation
 """
 from __future__ import annotations
 
@@ -88,6 +89,18 @@ def _cmd_tune_xgboost(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_optimise_threshold(args: argparse.Namespace) -> int:
+    from fraud_detection.evaluation import run_threshold_optimization
+
+    report = run_threshold_optimization(
+        CONFIG, fp_cost=args.fp_cost, fn_cost=args.fn_cost
+    )
+    print(f"\nThreshold report written to: {report}")
+    print(f"Metrics CSV + figures under: {CONFIG.path('reports_dir')} / "
+          f"{CONFIG.path('figures_dir')}")
+    return 0
+
+
 # ----------------------------------------------------------------------
 # Parser construction
 # ----------------------------------------------------------------------
@@ -154,6 +167,17 @@ def build_parser() -> argparse.ArgumentParser:
         help="Number of Optuna trials (default: from config, 50).",
     )
     p_tune.set_defaults(func=_cmd_tune_xgboost)
+
+    p_thr = sub.add_parser(
+        "optimise-threshold",
+        help="Sweep decision thresholds and recommend the minimum-business-cost "
+        "operating point for the saved production model.",
+    )
+    p_thr.add_argument("--fp-cost", type=float, default=None,
+                       help="Cost of one false positive (default: from config, 1).")
+    p_thr.add_argument("--fn-cost", type=float, default=None,
+                       help="Cost of one false negative (default: from config, 20).")
+    p_thr.set_defaults(func=_cmd_optimise_threshold)
 
     return parser
 
